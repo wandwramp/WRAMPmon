@@ -98,9 +98,25 @@ void handle_interrupt(unsigned int estat, unsigned int cctrl, unsigned int ear)
       }
     } 
   }
-  else if (estat & 0x2000) { // syscall exception
+  if (estat & 0x2000) { // syscall exception
     //    printf("Program completed.\n");
     program_counter = program_start_addr;
+    return;
+  }
+  if (estat & 0x1000) { // gpf
+    printf("\nGPF: $ear = 0x%08x  $estat = 0x%08x  $cctrl = 0x%08x\n", ear, estat, cctrl);
+    dump_regs();
+    return;
+  }
+  if (estat & 0x8000) { // arithmetic
+    printf("\nARITHMETIC: $ear = 0x%08x  $estat = 0x%08x  $cctrl = 0x%08x\n", ear, estat, cctrl);    
+    dump_regs();
+    return;
+  }
+  
+  if (estat & 0x4000) { // unexpected breakpoint
+    printf("\nBREAK: $ear = 0x%08x  $estat = 0x%08x  $cctrl = 0x%08x\n", ear, estat, cctrl);    
+    dump_regs();
     return;
   }
 
