@@ -226,7 +226,6 @@ start_program:
 	lw	$10, 10($1)
 	lw	$11, 11($1)
 	lw	$12, 12($1)
-	lw	$13, 13($1)
 	lw	$sp, 14($1)
 	lw	$ra, 15($1)
 	lw	$1, regsave+1($0)

@@ -16,7 +16,10 @@ interrupt_handler:
 	sw	$10, 10($1)
 	sw	$11, 11($1)
 	sw	$12, 12($1)
-	sw	$13, 13($1)
+
+	movsg	$2, $ers
+	sw	$2, 13($1)
+	
 	sw	$sp, 14($1)
 	sw	$ra, 15($1)
 
