@@ -15,11 +15,11 @@ int byte_no;
 void setPort(short p, short val)
 {
   if (p == TCK)
-    (*(unsigned *)0x7f000) = ((*(unsigned *)0x7f000) & 0x7) | (val << 3);
+    (*(unsigned *)0x7fff0) = ((*(unsigned *)0x7fff0) & 0x7) | (val << 3);
   if (p == TMS)
-    (*(unsigned *)0x7f000) = ((*(unsigned *)0x7f000) & 0xb) | (val << 2);
+    (*(unsigned *)0x7fff0) = ((*(unsigned *)0x7fff0) & 0xb) | (val << 2);
   if (p == TDI)
-    (*(unsigned *)0x7f000) = ((*(unsigned *)0x7f000) & 0xd) | (val << 1);
+    (*(unsigned *)0x7fff0) = ((*(unsigned *)0x7fff0) & 0xd) | (val << 1);
 }
 
 
@@ -52,7 +52,7 @@ void readByte(unsigned char *data)
 /* read the TDO bit from port */
 unsigned char readTDOBit()
 {
-  return ((*(unsigned *)0x7f000) & 1);
+  return ((*(unsigned *)0x7fff0) & 1);
 }
 
 /* Wait at least the specified number of microsec.                           */

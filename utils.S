@@ -94,7 +94,7 @@ wait_lock:
 lock_rom_exit:
 	# Lock in the Spartan	
 	addui	$1, $1, 0x1
-	sw	$1, 0x7f001($0)
+	sw	$1, 0x7fff1($0)
 
 	lw	$2, 0($sp)
 	lw	$3, 1($sp)
@@ -110,7 +110,7 @@ unlock_rom:
 	sw	$4, 2($sp)
 	
 	# Unlock in the Spartan
-	sw	$0, 0x7f001($0)
+	sw	$0, 0x7fff1($0)
 
 	la	$2, start_unlock
 	la	$3, rom_protect
