@@ -153,7 +153,7 @@ void command_about()
 {
   printf("WRAMPmon!!\n" \
 	 "Written by Dean Armstrong at the University of Waikato.\n" \
-	 "$Id: commands.c,v 1.2 2002/10/09 20:50:35 daa1 Exp $\n" \
+	 "$Id: commands.c,v 1.3 2003/03/25 00:12:22 daa1 Exp $\n" \
 	 "Type '?' and press enter for help on commands.\n");
 }
 
@@ -253,8 +253,9 @@ void command_dis()
 
 void dump_regs()
 {
+  
   printf("REGISTERS: (Program Counter = 0x%05x)\n", program_counter);
-  printf(" $0  = 0x%08x, $1  = 0x%08x, $2  = 0x%08x, $3  = 0x%08x\n", regsave[0], regsave[1], regsave[2], regsave[3]);
+  printf(" $0  = 0x%08x, $1  = 0x%08x, $2  = 0x%08x, $3  = 0x%08x\n", 0, regsave[1], regsave[2], regsave[3]);
   printf(" $4  = 0x%08x, $5  = 0x%08x, $6  = 0x%08x, $7  = 0x%08x\n", regsave[4], regsave[5], regsave[6], regsave[7]);
   printf(" $8  = 0x%08x, $9  = 0x%08x, $10 = 0x%08x, $11 = 0x%08x\n", regsave[8], regsave[9], regsave[10], regsave[11]);
   printf(" $12 = 0x%08x, $13 = 0x%08x, $sp = 0x%08x, $ra = 0x%08x\n", regsave[12], regsave[13], regsave[14], regsave[15]);
@@ -649,23 +650,23 @@ void do_step(boolean trace_into)
     }
   }
   else if ((insn >> 28) == 0xa) {// beqz
-    unsigned int temp;
+    int temp;
     if (regsave[(insn >> 20) & 0xf] == 0) {
       temp = (insn & 0xfffff);
       if (temp & 0x80000) {
 	temp |= 0xfff00000;
       }
-      step_break_addr += temp;
+      step_break_addr = (int)step_break_addr + temp;
     }
   }
   else if ((insn >> 28) == 0xb) {// bnez
-    unsigned int temp;
+    int temp;
     if (regsave[(insn >> 20) & 0xf] != 0) {
       temp = (insn & 0xfffff);
       if (temp & 0x80000) {
 	temp |= 0xfff00000;
       }
-      step_break_addr += temp;
+      step_break_addr = (int)step_break_addr + temp;
     }
   }
 

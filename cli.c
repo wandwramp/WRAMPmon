@@ -35,8 +35,8 @@ void welcome()
 {
   printf("\n");
   printf("+------------------------------------------------+\n");
-  printf("|                 WRAMPmon 0.4                   |\n");
-  printf("|    Copyright 2002 The University of Waikato    |\n");
+  printf("|                 WRAMPmon 0.5                   |\n");
+  printf("| Copyright 2002, 2003 The University of Waikato |\n");
   printf("|                                                |\n");
   printf("|          Written by Dean Armstrong             |\n");
   printf("+------------------------------------------------+\n");
