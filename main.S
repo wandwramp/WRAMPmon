@@ -8,7 +8,8 @@ monitor_stack:
 # This sets up all kinds of stuff, like the special registers,
 # stack, default exception handlers, etc...
 main:
-	subui	$1, $0, 1
+	lhi	$1, 0xffff
+	ori	$1, $1, 0xffff
 	addu	$2, $0, $0
 mem_clear_loop:
 	sw	$1, 0($2)

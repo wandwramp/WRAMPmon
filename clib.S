@@ -68,7 +68,7 @@ strcmp_compare:
 	lw	$7, 0($5)
 
 	# Compare them
-	subu	$1, $6, $7
+	sub	$1, $6, $7
 	bnez	$1, strcmp_notequal
 
 	# Move to the next characters
@@ -440,7 +440,7 @@ atoui:
 	lw	$6, 13($sp)	# u_int base
 
 	# max_accum = -1 / base
-	subui	$1, $0, 1
+	subi	$1, $0, 1
 	divu	$9, $1, $6
 	
 	# *ptrnum = 0
@@ -645,7 +645,7 @@ atob_not_overflow:
 	# else if (minus)
 	beqz	$8, atob_return
 	lw	$1, num($0)
-	subu	$1, $0, $1
+	sub	$1, $0, $1
 	sw	$1, num($0)
 	
 atob_return:

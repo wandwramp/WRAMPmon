@@ -338,7 +338,7 @@ printf_get_strlen:
 
 	# m = width - n
 	lw	$4, width($0)
-	subu	$4, $4, $1
+	sub	$4, $4, $1
 	sw	$4, m($0)
 
 	# if (adj == 'r')
@@ -348,7 +348,7 @@ printf_get_strlen:
 
 	# while (m-- > 0)
 printf_right_pad:	
-	subui	$4, $4, 1
+	subi	$4, $4, 1
 	sge	$1, $4, $0
 	beqz	$1, printf_do_output
 
@@ -365,7 +365,7 @@ printf_do_output:
 	# while (n--)
 	lw	$5, n($0)
 printf_output_next:
-	subui	$5, $5, 1
+	subi	$5, $5, 1
 	slt	$1, $5, $0
 	bnez	$1, printf_left_pad
 
@@ -383,7 +383,7 @@ printf_output_next:
 printf_left_pad:
 
 	# while (m-- > 0)
-	subui	$4, $4, 1
+	subi	$4, $4, 1
 	sge	$1, $4, $0
 	beqz	$1, printf_reset_buffer
 

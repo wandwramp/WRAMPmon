@@ -206,9 +206,9 @@ disassemble_branch:
 	slli	$8, $4, 12
 	srai	$8, $8, 12
 	# Add the PC
-	addu	$8, $8, $12
+	add	$8, $8, $12
 	# Add 1
-	addui	$8, $8, 1
+	addi	$8, $8, 1
 	# And with 0xfffff
 	la	$1, 0xfffff
 	and	$8, $8, $1

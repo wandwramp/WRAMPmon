@@ -82,6 +82,7 @@ void command_vm()
 
     // Convert it to a number
     atob(token, &viewmem_start, 10);
+    viewmem_start &= 0xfffff;
     viewmem_end = viewmem_start + viewmem_length - 1;
 
     // Get the second token
@@ -92,8 +93,11 @@ void command_vm()
     }
   }
 
+
   if (viewmem_end < viewmem_start)
     viewmem_end = viewmem_start + viewmem_length - 1;
+
+  viewmem_end &= 0xfffff;
 
   for (ptr = (unsigned int *)viewmem_start ; (unsigned int)ptr <= viewmem_end ; ptr += 4) {
     printf("0x%05x\t%08x %08x %08x %08x\t%c%c%c%c\n", (unsigned int)ptr, *ptr, *(ptr + 1), *(ptr + 2), *(ptr + 3),
@@ -149,7 +153,7 @@ void command_about()
 {
   printf("WRAMPmon!!\n" \
 	 "Written by Dean Armstrong at the University of Waikato.\n" \
-	 "$Id: commands.c,v 1.1 2002/07/08 04:30:31 daa1 Exp $\n" \
+	 "$Id: commands.c,v 1.2 2002/10/09 20:50:35 daa1 Exp $\n" \
 	 "Type '?' and press enter for help on commands.\n");
 }
 
@@ -207,7 +211,9 @@ void command_dis()
 
     // Convert it to a number
     atob(token, &dis_start, 10);
+    dis_start &= 0xfffff;
     dis_end = dis_start + dis_length - 1;
+
 
     // Get the second token
     token = get_token();
@@ -219,6 +225,8 @@ void command_dis()
 
   if (dis_end < dis_start)
     dis_end = dis_start + dis_length - 1;
+
+  dis_end &= 0xfffff;
 
   for (ptr = (unsigned int *)dis_start ; (unsigned int)ptr <= dis_end ; ptr++) {
     if (*ptr == BREAK_INSN) {
