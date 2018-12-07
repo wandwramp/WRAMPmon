@@ -337,84 +337,124 @@ void command_load()
   // Get the record
   for (;;) {
     do {
-      gets_noecho(line_buf);
+      // If gets_noecho returns null, the string either overran line_buf
+      // or the serial port threw an error in 0x70003.
+      if (!gets_noecho(line_buf)) {
+		// Gets error
+		putchar('G');
+		putchar('_');
+		token = 0;
+		continue;
+      }
       tokenise(line_buf);
-      
+
       token = get_token();
-    } while (!token);
+	} while (!token);
 
-    if (*token++ != 'S') {
-      printf("\nERROR: Bad character in S-Record.\n");
-      return;
-    }
- 
-    if (*token == '3') {
-      unsigned int len = 0, address = 0, i, j;
-      token++;
-      // Get the length of this record
-      for (i = 0 ; i < 2 ; i++) {
-	len <<= 4;
-	len |= a_con_bin(*token++);
-      }
-      // Get the address
-      for (i = 0 ; i < 8 ; i++) {
-	address <<= 4;
-	address |= a_con_bin(*token++);
-      }
-      
-      // Remove the address and checksum from the length count
-      len -= 5;
-      // Divide the length by 4 bytes per word
-      len >>= 2;
-
-      for (i = 0 ; i < len ; i++) {
-	unsigned int data = 0;
-
-	// Get a word of data
-	for (j = 0 ; j < 8 ; j++) {
-	  data <<= 4;
-	  data |= a_con_bin(*token++);
+	if (*token != 'S') {
+      putchar('S');
+      putchar(*token);
+      continue;
 	}
+	token++;
 
-	// Ensure we only write to RAM
-	if (in_rom(address)) {
-	  printf("\nERROR: S-Record attempted to load into ROM.\n");
-	  return;
+	if (*token == '3') {
+		unsigned int len = 0, address = 0, i, j;
+		unsigned int ourChecksum, theirChecksum;
+		token++;
+		// Get the length of this record
+		for (i = 0 ; i < 2 ; i++) {
+			len <<= 4;
+			len |= a_con_bin(*token++);
+		}
+		ourChecksum = len & 0xff;
+
+		// Get the address
+		for (i = 0 ; i < 8 ; i++) {
+			address <<= 4;
+			address |= a_con_bin(*token++);
+
+			// Each byte gets added to the checksum
+			if ((i % 2) == 1) {
+			    ourChecksum += address & 0xff;
+			}
+		}
+
+		// Remove the address and checksum from the length count
+		len -= 5;
+		// Divide the length by 4 bytes per word
+		len >>= 2;
+
+		for (i = 0 ; i < len ; i++) {
+			unsigned int data = 0;
+
+			// Get a word of data
+			for (j = 0 ; j < 8 ; j++) {
+				data <<= 4;
+				data |= a_con_bin(*token++);
+				// Add each byte to the checksum
+				if ((j % 2) == 1) {
+				    ourChecksum += data & 0xff;
+				}
+			}
+
+			// Ensure we only write to RAM
+			if (in_rom(address))
+			{
+				printf("\nERROR: S-Record attempted to load into ROM.\n");
+				return;
+			}
+
+			*((unsigned int *)address) = data;
+
+			address++;
+		}
+
+		// Finalise and compare the checksums
+		ourChecksum = ourChecksum & 0xff;
+		ourChecksum = ourChecksum ^ 0xff;
+		theirChecksum = 0;
+		for (i = 0 ; i < 2 ; i++) {
+			theirChecksum <<= 4;
+			theirChecksum |= a_con_bin(*token++);
+		}
+		if (ourChecksum != theirChecksum) {
+			// Checksum error
+			putchar('C');
+			putchar('_');
+			continue;
+		}
 	}
-	
-	*((unsigned int *)address) = data;
+	else if (*token == '7') {
+		unsigned int start_address = 0, i;
+		token++;
+		// Skip past the length field
+		token += 2;
 
-	address++;	
-      }
-    }
-    else if (*token == '7') {
-      unsigned int start_address = 0, i;
-      token++;
-      // Skip past the length field
-      token += 2;
-      
-      // Get the address
-      for (i = 0 ; i < 8 ; i++) {
-	start_address <<= 4;
-	start_address |= a_con_bin(*token++);
-      }
+		// Get the address
+		for (i = 0 ; i < 8 ; i++) {
+			start_address <<= 4;
+			start_address |= a_con_bin(*token++);
+		}
 
-      program_start_addr = (program_counter = (viewmem_start = (dis_start = start_address)));
+		program_start_addr = (program_counter = (viewmem_start = (dis_start = start_address)));
 
-      program_init();
-      on_load();
-      // Acknowledge this line
-      putchar('.');
+		program_init();
+		on_load();
+		// Acknowledge this line
+		putchar('.');
 
-      printf("\nProgram successfully loaded into memory.\n");
-      return;
-    }
-    else if (*token != '0') {
-      printf("\nERROR: Bad character in S-Record.\n");
-      return;      
-    }
-    // Acknowledge this line
-    putchar('.');
+		printf("\nProgram successfully loaded into memory.\n");
+		return;
+	}
+	else if (*token != '0') {
+		// Unknown S-Record type error
+		putchar('?');
+		putchar(*token);
+		continue;
+	}
+	// Acknowledge this line
+	putchar('.');
   }
 }
 

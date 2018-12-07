@@ -696,6 +696,7 @@ gets:
 .global gets_noecho
 gets_noecho:
 	subui	$sp, $sp, 9
+	sw	$3, 3($sp)
 	sw	$2, 4($sp)
 	sw	$4, 5($sp)
 	sw	$5, 6($sp)
@@ -705,9 +706,20 @@ gets_noecho:
 	lw	$5, 9($sp)	# buf
 	lw	$6, 9($sp)	# bufp
 	
+	addui	$3, $0, 0
+
 gets_noecho_loop:
 	# c = getchar()
 	jal	read_char
+
+	# if there haven't been any serial errors, check for them
+	# otherwise, retain the knowledge that there was one
+	# until we've finished reading the entire line
+	bnez $3, gets_noecho_had_error
+	lw $3, 0x70003($0)
+	andi $3, $3, 0x1C
+
+gets_noecho_had_error:
 	addu	$4, $1, $0
 
 	seqi	$1, $4, '\n'
@@ -718,7 +730,7 @@ gets_noecho_loop:
 	# *bufp = 0
 	sw	$0, 0($6)
 
-	# return(buf)
+	# return(buf) or NULL if there was an error
 	addu	$1, $5, $0
 	j	gets_noecho_return
 gets_noecho_not_newline:	
@@ -726,6 +738,7 @@ gets_noecho_not_newline:
 	jal	isprint
 
 	# Compute &buf[LINESIZE-3]
+	# if it overruns, return NULL
 	addui	$2, $5, 125
 	slt	$2, $6, $2
 	and	$1, $1, $2
@@ -740,6 +753,12 @@ gets_noecho_not_newline:
 
 gets_noecho_return:
 
+    # if there was a serial error, return NULL
+    beqz	$3, gets_noecho_no_return_error
+    addui	$1, $0, 0
+
+gets_noecho_no_return_error:
+    lw	$3, 3($sp)
 	lw	$2, 4($sp)
 	lw	$4, 5($sp)
 	lw	$5, 6($sp)
