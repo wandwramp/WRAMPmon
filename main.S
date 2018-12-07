@@ -8,6 +8,7 @@ monitor_stack:
 # This sets up all kinds of stuff, like the special registers,
 # stack, default exception handlers, etc...
 main:
+	# Set all memory from 0-03fff to 0xFFFFFFFF
 	lhi	$1, 0xffff
 	ori	$1, $1, 0xffff
 	addu	$2, $0, $0
@@ -15,7 +16,7 @@ mem_clear_loop:
 	sw	$1, 0($2)
 
 	addui	$2, $2, 1
-	la	$3, 0x1ffff
+	la	$3, 0x03fff
 	seq	$3, $3, $2
 	
 	beqz	$3, mem_clear_loop
@@ -30,7 +31,9 @@ mem_clear_loop:
 	jal	setup_ints
 
 	# Lock the ROMs
-	jal	lock_rom
+	# Rom unlock not supported on Basys boards, so don't bother
+	# interacting with memory that does nothing.
+	#jal	lock_rom
 	
 	# Initialise the serial port
 	jal	init_serial

@@ -176,7 +176,7 @@ program_init:
 	
 	# Setup the stack pointer to just below the bss segment
 	# which is at the top of RAM
-	la	$4, 0x08000	# top of RAM
+	la	$4, 0x04000     # top of RAM
 	la	$5, bss_size	# global symbol representing bss segment size
 	subu	$4, $4, $5	# subtract to find the stack start
 
@@ -269,7 +269,7 @@ flash_code:
 
 flash_start:
 	# Setup the stack pointer
-	la	$sp, 0x1ffff
+	la      $sp, 0x03fff
 	
 read_char_1:
 	lw	$1, 0x70003($zero)
@@ -439,4 +439,4 @@ send_char_4:
 
 flash_end:
 	beqz	$0, flash_start
-	
+

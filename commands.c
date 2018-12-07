@@ -47,8 +47,10 @@ void command_sws_debug()
 
   for (;;) {
     val = *ptr;
-    *(ptr + 3) = val;
-    *(ptr + 2) = val >> 4;
+    *(ptr + 9) = val;
+    *(ptr + 8) = val >> 4;
+    *(ptr + 7) = val >> 8;
+    *(ptr + 6) = val >> 12;
   }
 }
 
@@ -153,6 +155,7 @@ void command_about()
 {
   printf("WRAMPmon!!\n" \
 	 "Written by Dean Armstrong at the University of Waikato.\n" \
+	 "Reimplemented on the Basys3 FPGA by Daniel Oosterwijk and Tyler Marriner 2018.\n" \
 	 "$Id: commands.c,v 1.3 2003/03/25 00:12:22 daa1 Exp $\n" \
 	 "Type '?' and press enter for help on commands.\n");
 }

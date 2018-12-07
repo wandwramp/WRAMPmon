@@ -26,7 +26,7 @@ cmd_entry cmd_table[] = {
   { "about", (void *)command_about },
   { "help", (void *)command_help },
   { "?", (void *)command_help },
-  { "flash", (void *)command_flash },
+  //  { "flash", (void *)command_flash },
   //  { "jtag", (void *)command_jtag },
   { "sws_debug", (void *)command_sws_debug },
   { (char *)0, (void *)0 }};
@@ -35,10 +35,12 @@ void welcome()
 {
   printf("\n");
   printf("+------------------------------------------------+\n");
-  printf("|                 WRAMPmon 0.6                   |\n");
+  printf("|                 WRAMPmon 0.7                   |\n");
   printf("| Copyright 2002, 2003 The University of Waikato |\n");
   printf("|                                                |\n");
   printf("|          Written by Dean Armstrong             |\n");
+  printf("|       Ported to the Basys3 in 2018 by          |\n");
+  printf("|     Daniel Oosterwijk and Tyler Marriner       |\n");
   printf("+------------------------------------------------+\n");
   printf("\n");
   printf("Type ? and press enter for available commands.\n\n");

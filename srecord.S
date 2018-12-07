@@ -276,7 +276,7 @@ program_init:
 	
 	# Setup the stack pointer to just below the bss segment
 	# which is at the top of RAM
-	la	$4, 0x08000	# top of RAM
+	la $4, 0x04000 # top of RAM
 	la	$5, bss_size	# global symbol representing bss segment size
 	subu	$4, $4, $5	# subtract to find the stack start
 
