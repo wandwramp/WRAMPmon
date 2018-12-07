@@ -1,8 +1,12 @@
 # Based on https://www.gitignore.io/api/c,vim,linux
 
 ### WRAMP C ###
+## In this project, *.S and *.O are used during compilation and should not be ignored.
+## *.s and *.o are generated from *.c and *.S files.
 # Object files
 *.o
+# Assembly files
+*.s
 
 # Output files
 *.srec
