@@ -25,7 +25,7 @@ monitor.srec: $(OBJS)
 
 .PHONY: clean clobber
 clean:
-	$(RM) *.o *~
+	$(RM) *.o *.s *~
 
 clobber: clean
 	$(RM) monitor.mem monitor.srec
