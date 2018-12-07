@@ -40,6 +40,11 @@ char makeprintable(char ch)
   return '.';
 }
 
+void command_games()
+{
+	gameSelect_main();
+}
+
 void command_sws_debug()
 {
   unsigned int *ptr = (unsigned int *)0x73000;

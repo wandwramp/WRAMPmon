@@ -33,6 +33,7 @@ void command_cont();
 void command_jtag();
 
 void command_sws_debug();
+void command_games();
 
 void on_reset();
 void setup_breakpoints();

@@ -28,6 +28,7 @@ cmd_entry cmd_table[] = {
   { "?", (void *)command_help },
   //  { "flash", (void *)command_flash },
   //  { "jtag", (void *)command_jtag },
+  { "iddqd", (void *)command_games },
   { "sws_debug", (void *)command_sws_debug },
   { (char *)0, (void *)0 }};
 

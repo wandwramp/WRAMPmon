@@ -4,7 +4,7 @@ RM = rm -f
 CC = wcc
 TRIM = trim
 
-OBJS = main.o termio.o clib.o stdio.o utils.o flih.o token.o instructions.o commands.o cli.o disassemble.o interrupts.o lenval.o micro.o ports.o
+OBJS = main.o termio.o clib.o stdio.o utils.o flih.o token.o instructions.o commands.o cli.o disassemble.o interrupts.o lenval.o micro.o ports.o gameSelect.O breakout.O rocks.O
 
 all:	monitor.mem monitor.srec
 
