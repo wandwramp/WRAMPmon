@@ -2,8 +2,11 @@ AS = wasm
 LD = wlink
 RM = rm -f
 CC = wcc
+TRIM = trim
 
 OBJS = main.o termio.o clib.o stdio.o utils.o flih.o token.o instructions.o commands.o cli.o disassemble.o interrupts.o lenval.o micro.o ports.o
+
+all:	monitor.mem monitor.srec
 
 .S.o:	$<
 	$(AS) $<
@@ -14,10 +17,15 @@ OBJS = main.o termio.o clib.o stdio.o utils.o flih.o token.o instructions.o comm
 .c.s:	$<
 	$(CC) -S $<
 
-all:	monitor.srec
+monitor.mem:	monitor.srec
+	$(TRIM) -o $@ $<
 
 monitor.srec: $(OBJS)
 	$(LD) -v -Ttext 0x80000 -Ebss 0x20000 -o $@ $(OBJS)
 
+.PHONY: clean clobber
 clean:
-	$(RM) monitor.srec *.o *~
+	$(RM) *.o *~
+
+clobber: clean
+	$(RM) monitor.mem monitor.srec
