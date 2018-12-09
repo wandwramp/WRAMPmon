@@ -317,6 +317,9 @@ void command_load()
   char *token;
   char line_buf[128];
 
+  #define max_fails 10
+  int num_fails = 0;
+
   // Get the first token
   token = get_token();
   if (token)
@@ -336,7 +339,16 @@ void command_load()
 
   // Get the record
   for (;;) {
+    if (num_fails >= max_fails) {
+      printf("\nToo many errors while receiving file! Giving up.\n");
+      return;
+    }
     do {
+      if (num_fails >= max_fails) {
+        printf("\nCouldn't correctly receive that file!\n");
+        return;
+      }
+
       // If gets_noecho returns null, the string either overran line_buf
       // or the serial port threw an error in 0x70003.
       if (!gets_noecho(line_buf)) {
@@ -344,6 +356,7 @@ void command_load()
 		putchar('G');
 		putchar('_');
 		token = 0;
+		num_fails++;
 		continue;
       }
       tokenise(line_buf);
@@ -354,6 +367,7 @@ void command_load()
 	if (*token != 'S') {
       putchar('S');
       putchar(*token);
+      num_fails++;
       continue;
 	}
 	token++;
@@ -422,6 +436,7 @@ void command_load()
 			// Checksum error
 			putchar('C');
 			putchar('_');
+			num_fails++;
 			continue;
 		}
 	}
@@ -451,6 +466,7 @@ void command_load()
 		// Unknown S-Record type error
 		putchar('?');
 		putchar(*token);
+		num_fails++;
 		continue;
 	}
 	// Acknowledge this line
