@@ -439,4 +439,51 @@ send_char_4:
 
 flash_end:
 	beqz	$0, flash_start
+	
+	
+.global init_ptable
+init_ptable:
+	# Setup the ptable
+	la $1, ptable
+	movgs $ptable, $1	
+	
+	addui $1, $0, 0
+	lhi $2, 0xffff
+	ori $2, $2, 0xffff
+	
+ptable_loop:
+	sw $2, ptable($1)
+    addi $1, $1, 1
+    slti $3, $1, 32
+    bnez $3, ptable_loop
+
+	jr	$ra
+
+.bss 
+ptable:
+	.space 32
+		
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 

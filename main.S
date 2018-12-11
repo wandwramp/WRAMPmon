@@ -41,6 +41,9 @@ mem_clear_loop:
 	# Enable interrupts
 	jal	enable_ints
 	
+	#setup the permission for the ptable
+	jal init_ptable
+	
 	# Initialise the stdio library
 	jal	stdio_init
 	# Setup the breakpoint table & step mode stuff
