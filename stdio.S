@@ -50,11 +50,6 @@ putchar_do_loop:
 
 	# column % 8
 	lw	$1, column($0)
-#	sw	$1, 0($sp)
-#	addui	$1, $0, 8
-#	sw	$1, 1($sp)
-#	jal	remainder
-
 	remui	$1, $1, 8
 	
 	# while (column % 8)
@@ -446,13 +441,8 @@ __conv_loop:
 	bnez	$1, __conv_done
 
 	# compute n * 10
-#	sw	$4, 0($sp)
-#	addui	$1, $0, 10
-#	sw	$1, 1($sp)
-#	jal	multiply
-
 	multui	$4, $4, 10
-#	addu	$4, $1, $0
+
 
 	# compute c - '0'
 	subui	$5, $5, '0'
@@ -502,10 +492,6 @@ prtn:
 	# cptr = tmpbuf
 	la	$7, tmpbuf
 prtn_divide_loop:
-	# Compute x % base
-#	sw	$5, 0($sp)
-#	sw	$4, 1($sp)
-#	jal	remainder
 
 	remu	$1, $5, $4
 	
@@ -524,12 +510,6 @@ prtn_lower_case:
 	sw	$8, 0($7)
 	# cptr++
 	addui	$7, $7, 1
-
-	# x /= b
-#	sw	$5, 0($sp)
-#	sw	$4, 1($sp)
-#	jal	divide
-#	addu	$5, $1, $0
 
 	divu	$5, $5, $4
 
