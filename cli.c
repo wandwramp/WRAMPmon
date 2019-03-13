@@ -1,3 +1,24 @@
+/*
+########################################################################
+# This file is part of WRAMPmon, the WRAMP monitor programe.
+#
+# Copyright (C) 2019 The University of Waikato, Hamilton, New Zealand.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+########################################################################
+*/
+
 #include "stdio.h"
 #include "commands.h"
 #include "token.h"
@@ -6,38 +27,38 @@
 
 typedef struct {
   char *cmd;
-  void *fn;
+  void (*fn)(void);
 } cmd_entry;
 
 cmd_entry cmd_table[] = {
-  { "load", (void *)command_load },
-  { "dis", (void *)command_dis },
-  { "vr", (void *)command_vr },
-  { "sr", (void *)command_sr },
-  { "sb", (void *)command_sb },
-  { "vb", (void *)command_vb },
-  { "rb", (void *)command_rb },
-  { "vm", (void *)command_vm },
-  { "sm", (void *)command_sm },
-  { "go", (void *)command_go },
-  { "cont", (void *)command_cont },
-  { "s", (void *)command_s },
-  { "so", (void *)command_so },
-  { "about", (void *)command_about },
-  { "help", (void *)command_help },
-  { "?", (void *)command_help },
-  //  { "flash", (void *)command_flash },
-  //  { "jtag", (void *)command_jtag },
-  { "iddqd", (void *)command_games },
-  { "sws_debug", (void *)command_sws_debug },
-  { (char *)0, (void *)0 }};
+	{"load",		&command_load 		},
+	{"dis",			&command_dis 		},
+	{"vr", 			&command_vr 		},
+	{"sr", 			&command_sr 		},
+	{"sb", 			&command_sb 		},
+	{"vb", 			&command_vb 		},
+	{"rb", 			&command_rb 		},
+	{"vm", 			&command_vm 		},
+	{"sm", 			&command_sm 		},
+	{"go", 			&command_go 		},
+	{"cont",		&command_cont 		},
+	{"s", 			&command_s 			},
+	{"so", 			&command_so 		},
+	{"about", 		&command_about 		},
+	{"help",		&command_help 		},
+	{"?", 			&command_help 		},
+	{"cls", 		&command_cls 		},
+	{"iddqd", 		&command_games		},
+	{"sws_debug",	&command_sws_debug	},
+	{(char *)0, 	&command_help 		}
+  };
 
 void welcome()
 {
   printf("\n");
   printf("+------------------------------------------------+\n");
-  printf("|                 WRAMPmon 0.7                   |\n");
-  printf("| Copyright 2002, 2003 The University of Waikato |\n");
+  printf("|                 WRAMPmon 0.8                   |\n");
+  printf("| Copyright 2002-2019 The University of Waikato  |\n");
   printf("|                                                |\n");
   printf("|          Written by Dean Armstrong             |\n");
   printf("|       Ported to the Basys3 in 2018 by          |\n");

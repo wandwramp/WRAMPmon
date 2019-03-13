@@ -18,10 +18,61 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 ########################################################################
 */
-#ifndef TOKEN_H
-#define TOKEN_H
+/**
+ * WRAMP Serial Ports
+ **/
+typedef volatile struct
+{
+	int Tx;
+	int Rx;
+	int Ctrl;
+	int Stat;
+	int Iack;
+} WrampSp_t;
 
-void tokenise(char *str);
-char *get_token();
+//TODO: bit flag defines
+#define WRAMP_SP_RDR	0x0001
 
-#endif
+
+/**
+ * WRAMP Timer
+ **/
+typedef volatile struct
+{
+	int Ctrl;
+	int Load;
+	int Count;
+	int Iack;
+} WrampTimer_t;
+ 
+/**
+ * WRAMP Parallel Port
+ **/
+typedef volatile struct
+{
+	int Switches;
+	int Buttons;
+	int LeftSSD;
+	int RightSSD;
+	int Ctrl;
+	int Iack;
+} WrampParallel_t;
+
+ 
+/**
+ * WRAMP User Interrupt Button
+ **/
+typedef volatile struct
+{
+	int Iack;
+} WrampUserInt_t;
+
+
+/**
+ * Declarations
+ **/
+#define WrampSp1 		((WrampSp_t*)0x70000)
+#define WrampSp2 		((WrampSp_t*)0x71000)
+#define WrampTimer  	((WrampTimer_t*)0x72000)
+#define WrampParallel	((WrampParallel_t*)0x73000)
+#define WrampUserInt	((WrampUserInt_t*)0x7f000)
