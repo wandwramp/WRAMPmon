@@ -1,63 +1,20 @@
-#######################################################################
+########################################################################
+# This file is part of WRAMPmon, the WRAMP monitor programe.
 #
-#   NOTES FROM 2018
-#   
-#   This code is not used in the monitor application.
-#   It is an earlier version of the code which creates rocks.O,
-#   which is used in monitor.
-#   
-#   The game is functional, but has fewer features, such as the ability
-#   to exit the game and return to gameSelect.
+# Copyright (C) 2002-2019 The University of Waikato, Hamilton, New Zealand.
 #
-#   This code is included as a reference since none has been found that
-#   corresponds directly to rocks.O, which is included in its
-#   compiled state.
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
 #
-#   ~ Daniel Oosterwijk
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
 #
-#######################################################################
-
-#######################################################################
-# Source code for 0657.201Y Multitasking Kernel Implementation Job 3
-#
-# This code is provided as part of the University of Waikato's Computer
-# Systems course, 0657.201Y.
-#
-# This code is freely available for anyone to modify or use under the
-# terms of the following license. However if this code or any derivative 
-# is used in any piece of assessed work it must be clearly referenced.
-#
-# This code is Copyright (c) 2002, The University of Waikato	
-# All rights reserved.
-#
-# Redistribution and use in source and binary forms, with or without
-# modification, are permitted provided that the following conditions are
-# met:
-#
-#    * Redistributions of source code must retain the above copyright
-#      notice, this list of conditions and the following disclaimer.
-#
-#    * Redistributions in binary form must reproduce the above
-#      copyright notice, this list of conditions and the following
-#      disclaimer in the documentation and/or other materials provided
-#      with the distribution.
-#
-#    * Neither the name of the The University of Waikato nor the names
-#      of its contributors may be used to endorse or promote products
-#      derived from this software without specific prior written
-#      permission.
-#
-# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-# "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-# LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-# A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
-# OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
-# SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-# LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-# DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
-# THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-# OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 # Acknowledgments:
 #      Original MIPS code:      Jonathan Purvis
@@ -71,10 +28,9 @@
 #   Computer Systems Tutor <contact-cs201@cs.waikato.ac.nz> 	
 #
 # $Id: game.s,v 1.9 2002/08/15 03:02:44 jpc2 Exp $
-#######################################################################
+#######################################################################	
 
-
-	.equ	port_base,	0x71000
+	.equ	port_base,	0x70000
 	.equ	tx_offset,	0
 	.equ	rx_offset,	1
 	.equ	control_offset,	2
@@ -103,12 +59,17 @@ initgame:
 	la	$1, press_enter
 	sw	$1, 0($sp)
 	jal	print			# tell the user to press enter
+
+check4quit:
+	jal getkey			# Check for 'q' to quit the game
+	seqi $2, $1, 'q'
+	bnez $2, exit_game
 	
 wait4enter:
-	jal	getkey
-	seqi	$1, $1, 13
-	beqz	$1, wait4enter		# get keys until it`s enter
-	
+	#jal	getkey			# Check for enter to start a new game
+	seqi	$2, $1, 13
+	beqz	$2, check4quit	
+
 	la	$1, setup
 	sw	$1, 0($sp)
 	jal	print			# clear screen, home cursor, no cursor
@@ -206,13 +167,13 @@ do_next:
 
 
 	# Redundant (return from game subroutine)
-	
+exit_game:	
 	lw	$2, 2($sp)
 	lw	$3, 3($sp)
 	lw	$4, 4($sp)
 	lw	$5, 5($sp)
 	lw	$ra, 6($sp)
-
+	addui	$sp, $sp, 7
 	jr	$ra
 	
 #######################################################################
@@ -493,7 +454,7 @@ r:	.word	2836
 setup:
 	.asciiz	"\033[2J\033[H\033[?25l"
 press_enter:
-	.asciiz	"\007\033[13;28H Press <Enter> to play "
+	.asciiz	"\007\033[13;28H Press <Enter> to play \007\033[14;32H Or <q> to quit "
 pos:
 	.asciiz	"\033[xx;xxH"
 up_char:
