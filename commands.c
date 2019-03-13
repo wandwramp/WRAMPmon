@@ -1,11 +1,29 @@
+/*
+########################################################################
+# This file is part of WRAMPmon, the WRAMP monitor programe.
+#
+# Copyright (C) 2019 The University of Waikato, Hamilton, New Zealand.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+########################################################################
+*/
 #include "token.h"
 #include "clib.h"
 #include "flih.h"
 #include "utils.h"
 #include "instructions.h"
 #include "commands.h"
-
-#include "micro.h"
 
 boolean step_mode, cont_mode, step_break_mode;
 
@@ -924,6 +942,13 @@ void command_cont()
   start_program(program_counter);
 }
 
+void command_cls(){
+
+	printf("\\033[2J");
+
+	return;
+}
+
 unsigned get_word()
 {
   int i;
@@ -935,23 +960,3 @@ unsigned get_word()
   return data;
 }
 
-void command_jtag()
-{
-  int num_words, i;
-  unsigned *ptr;
-
-  printf("Expecting xsvf file...\n");
-
-  ptr = (unsigned *)0;
-  num_words = get_word();
-
-  for (i = 0 ; i < num_words ; i++)
-    *ptr++ = get_word();
-
-  printf("Waiting for keypress.\n");
-  read_char();
-  printf("Configuring via JTAG.\n");
-  configure_JTAG((unsigned *)0);
-  printf("Please reset the board.\n");
-  while(1);
-}

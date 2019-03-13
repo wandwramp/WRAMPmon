@@ -18,10 +18,9 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 ########################################################################
 */
-#ifndef TOKEN_H
-#define TOKEN_H
+#ifndef GAMESELECT_H
+#define GAMESELECT_H
 
-void tokenise(char *str);
-char *get_token();
+void gameselect_main();
 
 #endif
