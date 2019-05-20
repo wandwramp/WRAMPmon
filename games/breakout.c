@@ -123,6 +123,9 @@ void GotoXY(int x, int y)
 {
 	if(1 || 0 <= x && x < WIDTH && 0 <= y && y < HEIGHT)
 	{
+        x += 1;
+        y += 1;
+        
 		puts(ASCII_ESC);
 		x %= 100;
 		y %= 100;
