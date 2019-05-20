@@ -21,7 +21,7 @@ monitor.mem:	monitor.srec
 	$(TRIM) -o $@ $<
 
 monitor.srec: $(OBJS)
-	$(LD) -v -Ttext 0x80000 -Ebss 0x04000 -o $@ $(OBJS)
+	$(LD) -Ttext 0x80000 -Ebss 0x04000 -o $@ $(OBJS)
 
 .PHONY: clean clobber
 clean:
