@@ -30,9 +30,12 @@ typedef volatile struct
 	int Iack;
 } WrampSp_t;
 
-//TODO: bit flag defines
-#define WRAMP_SP_RDR	0x0001
-
+// Bit flag defines
+#define WRAMP_SP_TDS		0x002
+#define WRAMP_SP_RDR		0x001
+#define WRAMP_SP_ERR_IE		0x400
+#define WRAMP_SP_TDS_IE		0x200
+#define WRAMP_SP_RDR_IE		0x100
 
 /**
  * WRAMP Timer
@@ -44,6 +47,9 @@ typedef volatile struct
 	int Count;
 	int Iack;
 } WrampTimer_t;
+
+#define WRAMP_TIMER_RESTART		0x2
+#define WRAMP_TIMER_ENABLE		0x1
  
 /**
  * WRAMP Parallel Port
@@ -56,8 +62,15 @@ typedef volatile struct
 	int RightSSD;
 	int Ctrl;
 	int Iack;
+	int UpperLeftSSD;
+	int UpperRightSSD;
+	int LowerLeftSSD;
+	int LowerRightSSD;
+	int LED;
 } WrampParallel_t;
 
+#define WRAMP_PAR_IE			0x2
+#define WRAMP_PAR_HEX_DECODE	0x1
  
 /**
  * WRAMP User Interrupt Button
