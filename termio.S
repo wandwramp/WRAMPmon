@@ -46,6 +46,17 @@ send_char:
 	
 	jr	$ra
 
+# void send_char2(char ch)
+# contains a character to be sent on the second serial port
+.global	send_char2
+send_char2:
+	lw	$1, 0x71003($0)		# Get LSR
+	andi	$1, $1, 0x2		# Look at TDS bit
+	beqz	$1, send_char2		# Wait for previous character to be sent
 
+	lw	$1, 0($sp)		# Get the character
+	sw	$1, 0x71000($0)		# Send the character
+	
+	jr	$ra
 
 

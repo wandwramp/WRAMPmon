@@ -199,6 +199,7 @@ void command_help()
 	 " cont                               Continue executing a program\n" \
 	 " s                                  Step\n" \
 	 " so                                 Step over\n" \
+	 " cls                                Clear both serial ports\n" \
 	 " about                              Display information about this system\n" \
 	 " help or ?                          Display this information\n\n" \
 	 "More information about indivdual commands can be obtained by entering\n" \
@@ -943,10 +944,18 @@ void command_cont()
 }
 
 void command_cls(){
+  // Clears screen, then sets cursor position to home
+  char* escape_code = "\\033[2J\\033[H";
+  int i = 0;
 
-	printf("\\033[2J");
+  while (escape_code[i] != 0)
+  {
+    send_char(escape_code[i]);
+    send_char2(escape_code[i]);
+    i++;
+  }
 
-	return;
+  return;
 }
 
 unsigned get_word()
