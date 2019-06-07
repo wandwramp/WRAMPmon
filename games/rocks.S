@@ -22,10 +22,6 @@
 #
 # Modifications to use the WRAMP instruction set by Dean Armstrong and 
 # Jamie Curtis, 2002
-#	
-# Any queries or questions about this code can be directed to:
-#
-#   Computer Systems Tutor <contact-cs201@cs.waikato.ac.nz> 	
 #
 # $Id: game.s,v 1.9 2002/08/15 03:02:44 jpc2 Exp $
 #######################################################################	
