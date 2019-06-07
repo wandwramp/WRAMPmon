@@ -2,7 +2,7 @@
 ########################################################################
 # This file is part of WRAMPmon, the WRAMP monitor programe.
 #
-# Copyright (C) 2019 The University of Waikato, Hamilton, New Zealand.
+# Copyright (C) 2015-2019 The University of Waikato, Hamilton, New Zealand.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -16,6 +16,9 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
+#
+# Acknowledgments:
+#      Original code:    Paul Monigatti, April 2015
 ########################################################################
 */
 
